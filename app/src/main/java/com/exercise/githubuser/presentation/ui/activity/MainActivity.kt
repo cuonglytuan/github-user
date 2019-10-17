@@ -1,7 +1,8 @@
-package com.exercise.githubuser
+package com.exercise.githubuser.presentation.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.exercise.githubuser.R
 
 class MainActivity : AppCompatActivity() {
 
