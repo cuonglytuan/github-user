@@ -25,7 +25,10 @@ class UserDetailPresenter @Inject constructor(
     @SuppressLint("CheckResult")
     override fun getUserDetail(login: String) {
         // Offline
+        mView.showLoadingView()
         if (!mRepository.isOnline()) {
+            mView.hideLoadingView()
+            mView.onUserDetailFail()
             return
         }
 
@@ -35,8 +38,6 @@ class UserDetailPresenter @Inject constructor(
 
         isLoading = true
 
-        mView.showLoadingView()
-
         mRepository.getUserDetail(login)
             .subscribeOn(mSchedulerProvider.io())
             .observeOn(mSchedulerProvider.ui())
@@ -45,6 +46,8 @@ class UserDetailPresenter @Inject constructor(
                 isLoading = false
                 mView.hideLoadingView()
             }, {
+                mView.onUserDetailFail()
+                isLoading = false
                 mView.hideLoadingView()
             })
     }

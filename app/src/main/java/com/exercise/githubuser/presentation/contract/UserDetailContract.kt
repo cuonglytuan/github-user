@@ -14,6 +14,7 @@ interface UserDetailContract {
         fun hideLoadingView()
 
         fun onUserDetailLoaded(userDetail: UserDetail)
+        fun onUserDetailFail()
     }
 
     interface Presenter : BasePresenter {

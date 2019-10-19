@@ -18,29 +18,6 @@ import javax.inject.Inject
 
 class UserDetailFragment : Fragment(), UserDetailContract.View {
 
-    override fun showLoadingView() {
-        relativeLayoutProgressUserDetail?.visibility = View.VISIBLE
-    }
-
-    override fun hideLoadingView() {
-        relativeLayoutProgressUserDetail?.visibility = View.GONE
-    }
-
-    override fun onUserDetailLoaded(userDetail: UserDetail) {
-        textViewName.text = userDetail.name
-        textViewDetailLogin.text = userDetail.login
-        textViewDetailBio.text = userDetail.bio
-        textViewDetailLocation.text = userDetail.location
-        textViewDetailLink.text = userDetail.blog
-        when (userDetail.siteAdmin) {
-            true -> textViewDetailBadge.visibility = View.VISIBLE
-            else -> textViewDetailBadge.visibility = View.GONE
-        }
-        if (!TextUtils.isEmpty(userDetail.avatarUrl)) {
-            Picasso.get().load(userDetail.avatarUrl).into(imageViewUserDetail)
-        }
-    }
-
     @Inject
     lateinit var mPresenter: UserDetailContract.Presenter
 
@@ -88,10 +65,46 @@ class UserDetailFragment : Fragment(), UserDetailContract.View {
         imageButtonClose.setOnClickListener {
             activity?.onBackPressed()
         }
+
+        imageButtonCloseFail.setOnClickListener {
+            activity?.onBackPressed()
+        }
+
+        buttonDetailRetry.setOnClickListener {
+            mPresenter.getUserDetail(login)
+        }
     }
 
     override fun setPresenter(presenter: UserDetailContract.Presenter) {
         this.mPresenter = presenter
+    }
+
+    override fun showLoadingView() {
+        relativeLayoutProgressUserDetail.visibility = View.VISIBLE
+    }
+
+    override fun hideLoadingView() {
+        relativeLayoutProgressUserDetail.visibility = View.GONE
+    }
+
+    override fun onUserDetailLoaded(userDetail: UserDetail) {
+        relativeLayoutDetailError.visibility = View.GONE
+        textViewName.text = userDetail.name
+        textViewDetailLogin.text = userDetail.login
+        textViewDetailBio.text = userDetail.bio
+        textViewDetailLocation.text = userDetail.location
+        textViewDetailLink.text = userDetail.blog
+        when (userDetail.siteAdmin) {
+            true -> textViewDetailBadge.visibility = View.VISIBLE
+            else -> textViewDetailBadge.visibility = View.GONE
+        }
+        if (!TextUtils.isEmpty(userDetail.avatarUrl)) {
+            Picasso.get().load(userDetail.avatarUrl).into(imageViewUserDetail)
+        }
+    }
+
+    override fun onUserDetailFail() {
+        relativeLayoutDetailError.visibility = View.VISIBLE
     }
 
 }

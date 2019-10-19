@@ -14,6 +14,8 @@ interface UserContract {
         fun hideLoadingView()
 
         fun onUserLoaded(user: List<User>)
+        fun onUserEmpty()
+        fun onUserFail()
     }
 
     interface Presenter : BasePresenter {

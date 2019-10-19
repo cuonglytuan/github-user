@@ -19,29 +19,6 @@ import javax.inject.Inject
 import kotlin.math.roundToInt
 
 class UserFragment : Fragment(), UserContract.View, UserAdapter.UserInfoListener {
-    override fun onUserClick(user: User) {
-        val parentActivity = activity as MainActivity
-        parentActivity.changeFragment(
-            UserDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable(UserDetailFragment.KEY_USER_LOGIN, user.login)
-                }},
-            parentActivity.supportFragmentManager,
-            false
-        )
-    }
-
-    override fun showLoadingView() {
-        relativeLayoutProgressBarReputation?.visibility = View.VISIBLE
-    }
-
-    override fun hideLoadingView() {
-        relativeLayoutProgressBarReputation?.visibility = View.GONE
-    }
-
-    override fun onUserLoaded(user: List<User>) {
-        userAdapter.update(user)
-    }
 
     @Inject
     lateinit var mPresenter: UserContract.Presenter
@@ -106,15 +83,60 @@ class UserFragment : Fragment(), UserContract.View, UserAdapter.UserInfoListener
                 }
             })
         }
+
+        buttonRetry.setOnClickListener {
+            mPresenter.getUser(0L)
+        }
     }
 
     override fun setPresenter(presenter: UserContract.Presenter) {
         this.mPresenter = presenter
     }
 
-    inner class BottomSpacesItemDecoration internal constructor(private val space: Int) : RecyclerView.ItemDecoration() {
+    override fun onUserClick(user: User) {
+        val parentActivity = activity as MainActivity
+        parentActivity.changeFragment(
+            UserDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(UserDetailFragment.KEY_USER_LOGIN, user.login)
+                }
+            },
+            parentActivity.supportFragmentManager,
+            false
+        )
+    }
 
-        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+    override fun showLoadingView() {
+        relativeLayoutProgressBarUser.visibility = View.VISIBLE
+    }
+
+    override fun hideLoadingView() {
+        relativeLayoutProgressBarUser.visibility = View.GONE
+    }
+
+    override fun onUserLoaded(user: List<User>) {
+        textViewEmptyUser.visibility = View.GONE
+        relativeLayoutError.visibility = View.GONE
+        userAdapter.update(user)
+    }
+
+    override fun onUserFail() {
+        relativeLayoutError.visibility = View.VISIBLE
+    }
+
+    override fun onUserEmpty() {
+        textViewEmptyUser.visibility = View.VISIBLE
+    }
+
+    inner class BottomSpacesItemDecoration internal constructor(private val space: Int) :
+        RecyclerView.ItemDecoration() {
+
+        override fun getItemOffsets(
+            outRect: Rect,
+            view: View,
+            parent: RecyclerView,
+            state: RecyclerView.State
+        ) {
             if (parent.getChildAdapterPosition(view) == state.itemCount - 1) {
                 outRect.bottom = space
             }
