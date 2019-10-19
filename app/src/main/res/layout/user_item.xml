@@ -4,6 +4,7 @@
     android:id="@+id/linearLayoutContainer"
     android:layout_width="match_parent"
     android:layout_height="@dimen/user_item_size"
+    android:foreground="?android:attr/selectableItemBackground"
     android:orientation="horizontal">
 
     <androidx.cardview.widget.CardView

@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="UserCommonTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="UserCommonTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="colorSwitchThumbNormal">@color/colorPrimary</item>
+    </style>
+    <style name="TransparentTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/transparentFull</item>
+        <item name="colorPrimaryDark">@color/transparentFull</item>
+        <item name="colorAccent">@color/transparentFull</item>
+        <item name="colorSwitchThumbNormal">@color/transparentFull</item>
     </style>
 </resources>

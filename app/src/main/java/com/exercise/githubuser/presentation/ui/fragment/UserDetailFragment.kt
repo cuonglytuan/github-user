@@ -13,6 +13,8 @@ import com.exercise.githubuser.presentation.ui.activity.MainActivity
 import com.squareup.picasso.Picasso
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.user_detail_fragment.*
+import kotlinx.android.synthetic.main.user_detail_fragment.relativeLayoutProgressUserDetail
+import kotlinx.android.synthetic.main.user_detail_info.*
 import javax.inject.Inject
 
 class UserDetailFragment : Fragment(), UserDetailContract.View {
@@ -50,7 +52,6 @@ class UserDetailFragment : Fragment(), UserDetailContract.View {
     }
 
     companion object {
-        fun newInstance() = UserDetailFragment()
         const val KEY_USER_LOGIN = "key_user_login"
     }
 
@@ -89,9 +90,10 @@ class UserDetailFragment : Fragment(), UserDetailContract.View {
         }
 
         val parentActivity = activity as MainActivity
+        parentActivity.supportActionBar?.hide()
 
-        activity?.let {
-
+        imageButtonClose.setOnClickListener {
+            activity?.onBackPressed()
         }
     }
 

@@ -86,7 +86,7 @@ class UserFragment : Fragment(), UserContract.View, UserAdapter.UserInfoListener
         }
 
         val parentActivity = activity as MainActivity
-        parentActivity.setSupportActionBar(toolbarUser)
+        parentActivity.supportActionBar?.show()
 
         activity?.let {
             val linearLayoutManager = LinearLayoutManager(it)
