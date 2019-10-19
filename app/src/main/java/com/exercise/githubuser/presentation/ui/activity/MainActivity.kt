@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(com.exercise.githubuser.R.id.container, UserFragment.newInstance())
+                .replace(R.id.container, UserFragment.newInstance())
                 .commitNow()
         }
     }

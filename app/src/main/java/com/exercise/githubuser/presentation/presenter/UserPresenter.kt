@@ -13,8 +13,8 @@ class UserPresenter @Inject constructor(
 ) : UserContract.Presenter {
 
     private var isLoading = false
-    private var since: Long = 1
-    private var canLoadMore = false
+    private var since: Long = 0
+    private var canLoadMore = true
 
     init {
         mView.setPresenter(this)
@@ -39,15 +39,22 @@ class UserPresenter @Inject constructor(
 
         if (startIndex == 0L) {
             mView.showLoadingView()
+            canLoadMore = true
+            since = 0
         }
 
         mRepository.getUsers(startIndex, 20)
             .subscribeOn(mSchedulerProvider.io())
             .observeOn(mSchedulerProvider.ui())
             .subscribe({ listUser ->
-                mView.onUserLoaded(listUser)
                 isLoading = false
-                since = listUser.last().id
+                if (!listUser.isNullOrEmpty() && since != listUser.last().id) {
+                    mView.onUserLoaded(listUser)
+                    since = listUser.last().id
+                    canLoadMore = true
+                } else {
+                    canLoadMore = false
+                }
                 mView.hideLoadingView()
             }, {
                 mView.hideLoadingView()
@@ -55,9 +62,9 @@ class UserPresenter @Inject constructor(
     }
 
     override fun getUserNext() {
-//        if (!canLoadMore) {
-//            return
-//        }
+        if (!canLoadMore) {
+            return
+        }
         getUser(since)
     }
 }

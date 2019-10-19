@@ -72,11 +72,6 @@ class UserFragment : Fragment(), UserContract.View, UserAdapter.UserInfoListener
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mPresenter.start()
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        mPresenter.start()
         mPresenter.getUser(0L)
     }
 

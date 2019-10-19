@@ -13,7 +13,6 @@ import com.exercise.githubuser.presentation.ui.activity.MainActivity
 import com.squareup.picasso.Picasso
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.user_detail_fragment.*
-import kotlinx.android.synthetic.main.user_detail_fragment.relativeLayoutProgressUserDetail
 import kotlinx.android.synthetic.main.user_detail_info.*
 import javax.inject.Inject
 
@@ -74,12 +73,6 @@ class UserDetailFragment : Fragment(), UserDetailContract.View {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mPresenter.start()
-        mPresenter.getUserDetail(login)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         mPresenter.start()
         mPresenter.getUserDetail(login)
     }
