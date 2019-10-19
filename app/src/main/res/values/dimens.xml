@@ -11,4 +11,7 @@
     <dimen name="user_item_size">84dp</dimen>
     <dimen name="user_image_stoke">0.5dp</dimen>
     <dimen name="bottom_loading_size">50dp</dimen>
+
+    <dimen name="detail_user_image_size">120dp</dimen>
+    <dimen name="detail_user_image_corner">60dp</dimen>
 </resources>

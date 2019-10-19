@@ -2,15 +2,17 @@ package com.exercise.githubuser.domain.repository
 
 import android.content.Context
 import com.exercise.githubuser.data.entity.User
+import com.exercise.githubuser.data.entity.UserDetail
+import com.exercise.githubuser.data.network.UserDetailService
 import com.exercise.githubuser.data.network.UserService
 import com.exercise.githubuser.ext.isNetworkConnected
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor(val context: Context) : UserRepository {
+class UserDetailRepositoryImpl @Inject constructor(val context: Context) : UserDetailRepository {
 
-    override fun getUsers(since: Long, pageSize: Int): Observable<List<User>> {
-        return UserService.getUsers(since, pageSize)
+    override fun getUserDetail(login: String): Observable<UserDetail> {
+        return UserDetailService.getUserDetail(login)
     }
 
     override fun isOnline(): Boolean {

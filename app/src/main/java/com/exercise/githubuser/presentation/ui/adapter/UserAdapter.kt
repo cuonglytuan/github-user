@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.exercise.githubuser.R
@@ -25,7 +26,7 @@ class UserAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
-        val v: View = LayoutInflater.from(parent.context).inflate(R.layout.user_item, parent, false)
+        val v: View = LayoutInflater.from(context).inflate(R.layout.user_item, parent, false)
         return UserViewHolder(v)
     }
 
@@ -41,6 +42,9 @@ class UserAdapter(
         if (!TextUtils.isEmpty(user.avatarUrl)) {
             Picasso.get().load(user.avatarUrl).into(holder.imageViewUser)
         }
+        holder.linearLayoutContainer.setOnClickListener {
+            listener?.onUserClick(user)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -48,6 +52,7 @@ class UserAdapter(
     }
 
     class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var linearLayoutContainer: LinearLayout = itemView.findViewById(R.id.linearLayoutContainer)
         var imageViewUser: ImageView = itemView.findViewById(R.id.imageViewUser)
         var textViewName: TextView = itemView.findViewById(R.id.textViewName)
         var textViewBadge: TextView = itemView.findViewById(R.id.textViewBadge)

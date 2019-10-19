@@ -1,20 +1,18 @@
 package com.exercise.githubuser.presentation.presenter
 
 import android.annotation.SuppressLint
-import com.exercise.githubuser.domain.repository.UserRepository
-import com.exercise.githubuser.presentation.contract.UserContract
+import com.exercise.githubuser.domain.repository.UserDetailRepository
+import com.exercise.githubuser.presentation.contract.UserDetailContract
 import com.exercise.githubuser.utils.scheduler.BaseSchedulerProvider
 import javax.inject.Inject
 
-class UserPresenter @Inject constructor(
-    private val mView: UserContract.View,
-    private val mRepository: UserRepository,
+class UserDetailPresenter @Inject constructor(
+    private val mView: UserDetailContract.View,
+    private val mRepository: UserDetailRepository,
     private val mSchedulerProvider: BaseSchedulerProvider
-) : UserContract.Presenter {
+) : UserDetailContract.Presenter {
 
     private var isLoading = false
-    private var since: Long = 1
-    private var canLoadMore = false
 
     init {
         mView.setPresenter(this)
@@ -25,7 +23,7 @@ class UserPresenter @Inject constructor(
     }
 
     @SuppressLint("CheckResult")
-    override fun getUser(startIndex: Long) {
+    override fun getUserDetail(login: String) {
         // Offline
         if (!mRepository.isOnline()) {
             return
@@ -37,27 +35,17 @@ class UserPresenter @Inject constructor(
 
         isLoading = true
 
-        if (startIndex == 0L) {
-            mView.showLoadingView()
-        }
+        mView.showLoadingView()
 
-        mRepository.getUsers(startIndex, 20)
+        mRepository.getUserDetail(login)
             .subscribeOn(mSchedulerProvider.io())
             .observeOn(mSchedulerProvider.ui())
-            .subscribe({ listUser ->
-                mView.onUserLoaded(listUser)
+            .subscribe({ detailUser ->
+                mView.onUserDetailLoaded(detailUser)
                 isLoading = false
-                since = listUser.last().id
                 mView.hideLoadingView()
             }, {
                 mView.hideLoadingView()
             })
-    }
-
-    override fun getUserNext() {
-//        if (!canLoadMore) {
-//            return
-//        }
-        getUser(since)
     }
 }

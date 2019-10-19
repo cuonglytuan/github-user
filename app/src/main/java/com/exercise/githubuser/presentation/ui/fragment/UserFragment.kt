@@ -20,7 +20,15 @@ import kotlin.math.roundToInt
 
 class UserFragment : Fragment(), UserContract.View, UserAdapter.UserInfoListener {
     override fun onUserClick(user: User) {
-
+        val parentActivity = activity as MainActivity
+        parentActivity.changeFragment(
+            UserDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(UserDetailFragment.KEY_USER_LOGIN, user.login)
+                }},
+            parentActivity.supportFragmentManager,
+            false
+        )
     }
 
     override fun showLoadingView() {

@@ -7,8 +7,8 @@ import io.reactivex.Observable
 class UserService {
     companion object {
         fun getUsers(since: Long, pageSize: Int): Observable<List<User>> {
-            val sofUserInfoApi = NetworkService.getRetrofit().create(UserApi::class.java)
-            return sofUserInfoApi.getSofUsers(since, pageSize)
+            val userInfoApi = NetworkService.getRetrofit().create(UserApi::class.java)
+            return userInfoApi.getUsers(since, pageSize)
         }
     }
 }
