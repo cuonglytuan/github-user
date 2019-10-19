@@ -1,13 +1,12 @@
 package com.exercise.githubuser.presentation.presenter
 
-import com.exercise.githubuser.data.entity.User
 import com.exercise.githubuser.data.entity.UserDetail
 import com.exercise.githubuser.domain.repository.UserDetailRepository
+import com.exercise.githubuser.ext.convertInputStreamToString
 import com.exercise.githubuser.presentation.contract.UserDetailContract
 import com.exercise.githubuser.utils.scheduler.BaseSchedulerProvider
 import com.exercise.githubuser.utils.scheduler.ImmediateSchedulerProvider
 import io.reactivex.Observable
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -16,9 +15,6 @@ import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 import org.powermock.api.mockito.PowerMockito.`when`
 import org.powermock.modules.junit4.PowerMockRunner
-import java.io.IOException
-import java.io.InputStream
-import java.io.InputStreamReader
 
 @RunWith(PowerMockRunner::class)
 class UserDetailPresenterTest {
@@ -29,6 +25,7 @@ class UserDetailPresenterTest {
 
     private lateinit var presenter: UserDetailPresenter
     private lateinit var schedulerProvider: BaseSchedulerProvider
+    private lateinit var userDetail: UserDetail
 
     @Before
     fun setUp() {
@@ -36,6 +33,14 @@ class UserDetailPresenterTest {
 
         schedulerProvider = ImmediateSchedulerProvider()
         presenter = UserDetailPresenter(view, repository, schedulerProvider)
+
+        val jsonInputStream = javaClass.getResourceAsStream("/userdetail.json")
+        var jsonBody = ""
+        jsonInputStream?.let {
+            jsonBody = String().convertInputStreamToString(it)
+        }
+
+        userDetail = UserDetail.parseUserDetail(jsonBody)
     }
 
     @Test
@@ -46,14 +51,6 @@ class UserDetailPresenterTest {
 
     @Test
     fun getUserDetailSuccessTest() {
-
-        val jsonInputStream = javaClass.getResourceAsStream("/userdetail.json")
-        var jsonBody = ""
-        jsonInputStream?.let {
-             jsonBody = convertInputStreamToString(it)
-        }
-
-        val userDetail = UserDetail.parseUserDetail(jsonBody)
 
         stubbingGetUserDetail().thenReturn(Observable.just(userDetail))
         stubbingIsOnline().thenReturn(true)
@@ -83,23 +80,6 @@ class UserDetailPresenterTest {
         verify(view).showLoadingView()
         verify(view).onUserDetailFail()
         verify(view).hideLoadingView()
-    }
-
-    @Throws(IOException::class)
-    private fun convertInputStreamToString(inputStream: InputStream): String {
-        val reader = InputStreamReader(inputStream)
-        val builder = StringBuilder()
-        val buffer = CharArray(512)
-        var read: Int
-        do {
-            read = reader.read(buffer)
-            if (read <= 0) {
-                break
-            }
-            builder.append(buffer, 0, read)
-
-        } while (true)
-        return builder.toString()
     }
 
     private fun stubbingGetUserDetail() = `when`(repository.getUserDetail("defunkt"))

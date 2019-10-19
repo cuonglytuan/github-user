@@ -7,6 +7,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
+    testBuildType "staging"
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.exercise.githubuser"
@@ -20,21 +21,17 @@ android {
         debug {
             signingConfig signingConfigs.debug
             versionNameSuffix "-debug"
+            buildConfigField("String", "END_POINT", "\"https://api.github.com\"")
+        }
+        staging {
+            signingConfig signingConfigs.debug
+            versionNameSuffix "-debug"
+            debuggable true
+            buildConfigField("String", "END_POINT", "\"http://localhost:8080\"")
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    flavorDimensions "api"
-    productFlavors {
-        staging {
-            dimension "api"
-            buildConfigField("String", "END_POINT", "\"https://api.github.com\"")
-        }
-        production {
-            dimension "api"
             buildConfigField("String", "END_POINT", "\"https://api.github.com\"")
         }
     }
@@ -77,6 +74,9 @@ dependencies {
     testImplementation 'org.powermock:powermock-api-mockito2:2.0.0-beta.5'
     testImplementation 'org.powermock:powermock-module-junit4:2.0.0-beta.5'
     testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.squareup.okhttp3:mockwebserver:4.2.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
 }
