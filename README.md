@@ -11,7 +11,7 @@ Github user exercise
 - From API 21
 - Both portrait and landscape mode
 ### Architecture
-MVP + Clean Architecture
+MVVM (android arch component) + Clean Architecture
 
 ```
 └── githubuser
