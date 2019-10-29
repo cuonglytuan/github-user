@@ -1,64 +1,53 @@
 package com.exercise.githubuser.presentation.ui.adapter
 
-import android.content.Context
-import android.text.TextUtils
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.exercise.githubuser.R
 import com.exercise.githubuser.data.entity.User
-import com.squareup.picasso.Picasso
-import java.util.*
+import com.exercise.githubuser.databinding.UserItemBinding
 
-class UserAdapter(
-    private val context: Context,
-    private var list: ArrayList<User>,
-    private val listener: UserInfoListener?
-) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
+class UserAdapter : ListAdapter<User, RecyclerView.ViewHolder>(UserDiffCallback())  {
 
-    fun update(itemUser: List<User>) {
-        this.list.addAll(itemUser)
-        notifyDataSetChanged()
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val user = getItem(position)
+        (holder as UserViewHolder).bind(user)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
-        val v: View = LayoutInflater.from(context).inflate(R.layout.user_item, parent, false)
-        return UserViewHolder(v)
+        return UserViewHolder(UserItemBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false))
     }
 
-    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        if (itemCount <= 0) return
-        val user: User = list[position]
+    class UserViewHolder(private val binding: UserItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        holder.textViewName.text = user.login
-        when (user.siteAdmin) {
-            true -> holder.textViewBadge.visibility = View.VISIBLE
-            else -> holder.textViewBadge.visibility = View.GONE
-        }
-        if (!TextUtils.isEmpty(user.avatarUrl)) {
-            Picasso.get().load(user.avatarUrl).into(holder.imageViewUser)
-        }
-        holder.linearLayoutContainer.setOnClickListener {
-            listener?.onUserClick(user)
-        }
-    }
+        init {
+            binding.setClickListener{
 
-    override fun getItemCount(): Int {
-        return list.size
-    }
+            }
+        }
 
-    class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var linearLayoutContainer: LinearLayout = itemView.findViewById(R.id.linearLayoutContainer)
-        var imageViewUser: ImageView = itemView.findViewById(R.id.imageViewUser)
-        var textViewName: TextView = itemView.findViewById(R.id.textViewName)
-        var textViewBadge: TextView = itemView.findViewById(R.id.textViewBadge)
+        fun bind(item: User) {
+            binding.apply {
+                user = item
+                executePendingBindings()
+            }
+        }
     }
 
     interface UserInfoListener {
         fun onUserClick(user: User)
+    }
+
+    private class UserDiffCallback : DiffUtil.ItemCallback<User>() {
+        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
+            return oldItem.login == newItem.login
+        }
+
+        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
+            return oldItem.avatarUrl == newItem.avatarUrl
+                    && oldItem.siteAdmin == newItem.siteAdmin
+        }
     }
 }

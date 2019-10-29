@@ -32,5 +32,13 @@ class NetworkService {
                 .build()
         }
 
+        fun getOriginalRetrofit(): Retrofit {
+            return Retrofit.Builder()
+                .baseUrl(BuildConfig.END_POINT)
+                .client(getOkHttpClient())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+        }
+
     }
 }

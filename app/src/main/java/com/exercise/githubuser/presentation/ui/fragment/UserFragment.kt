@@ -64,7 +64,7 @@ class UserFragment : Fragment(), UserContract.View, UserAdapter.UserInfoListener
             val linearLayoutManager = LinearLayoutManager(it)
             recyclerViewUser.layoutManager = linearLayoutManager
             userAdapter =
-                UserAdapter(it, ArrayList(), this)
+                UserAdapter()
             recyclerViewUser.setHasFixedSize(true)
             recyclerViewUser.adapter = userAdapter
 
@@ -117,7 +117,7 @@ class UserFragment : Fragment(), UserContract.View, UserAdapter.UserInfoListener
     override fun onUserLoaded(user: List<User>) {
         textViewEmptyUser.visibility = View.GONE
         relativeLayoutError.visibility = View.GONE
-        userAdapter.update(user)
+        userAdapter.submitList(user)
     }
 
     override fun onUserFail() {
