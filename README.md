@@ -1,5 +1,5 @@
 # github-user
-Github user exercise
+Github user app MVP  + Clean Architecture
 ### How to build
 - IDE: android studio 3.5.1
 - Import project
