@@ -11,7 +11,7 @@ Github user app MVP  + Clean Architecture
 - From API 21
 - Both portrait and landscape mode
 ### Architecture
-MVP + Clean Architecture
+MVVM (android arch component) + Clean Architecture
 
 ```
 └── githubuser
